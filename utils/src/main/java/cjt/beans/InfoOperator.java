@@ -34,7 +34,9 @@ public abstract class InfoOperator {
         CollectionUtils.addAll(this.blackListKey,blackListKey);
     }
 
+    //是否符合脱敏的要求
     public abstract boolean shouldOperator(String input);
 
+    //脱敏
     public abstract String operator(String input);
 }

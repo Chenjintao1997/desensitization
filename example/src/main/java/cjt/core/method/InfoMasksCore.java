@@ -8,10 +8,7 @@ import cjt.beans.RealNameInfoOperator;
 import cjt.core.bo.InfoMaskPojoTest;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class InfoMasksCore {
@@ -89,5 +86,9 @@ public class InfoMasksCore {
         map.put("map",map2);
         System.out.println("脱敏前："+map.toString());
         return map;
+    }
+    @InfoMasks
+    public Object test3(){
+        return new Date();
     }
 }

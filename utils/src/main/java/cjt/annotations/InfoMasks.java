@@ -10,5 +10,6 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface InfoMasks {
+    //需要脱敏的信息类型对象数组
     InfoMask[] value() default {@InfoMask(PhoneInfoOperator.class),@InfoMask(RealNameInfoOperator.class),@InfoMask(IdCardInfoOperator.class)};
 }

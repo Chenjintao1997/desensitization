@@ -10,12 +10,14 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class OperationObject {
+    //生命一个接口，改接口会作为doOperation方法的参数，供方法调用者实现使用，在doOperation方法内实现其功能
     public interface Visitor{
         void visit(Object object,Object indexOrKey,Object value);
     };
 
+    //获取到对象内所有的数据并处理，visitor对象由方法调用方实现
     public static void doOperation(Object obj,Visitor visitor){
-        if(obj instanceof Collection){
+        if(obj instanceof Collection){                                   //判断是否是Collection集合
             Iterator iterator = ((Collection)obj).iterator();
             int i = 0;
             while (iterator.hasNext()){
@@ -30,7 +32,7 @@ public class OperationObject {
                 }
                 i++;
             }
-        }else if(obj instanceof Map){
+        }else if(obj instanceof Map){                                   //判断是否是Map集合
             for(Map.Entry<String,Object> entry:((Map<String,Object>)obj).entrySet()){
                 if(entry.getKey() != null && !entry.getKey().equals("class"))  {
                     if(entry.getValue() != null && (entry.getValue() instanceof Integer || entry.getValue() instanceof Byte ||
@@ -43,7 +45,7 @@ public class OperationObject {
                     }
                 }
             }
-        }else if(obj !=null && obj.getClass().isArray()){
+        }else if(obj !=null && obj.getClass().isArray()){               //判断是否是数组
             if((obj instanceof int[])){
                 for(int i = 0;i<((int[]) obj).length;i++){
                     visitor.visit(obj,i,((int[]) obj)[i]);
@@ -86,7 +88,7 @@ public class OperationObject {
                     doOperation(obj1,visitor);
                 }
             }
-        }else if(obj!=null &&
+        }else if(obj!=null &&                                                //判断是否是pojo对象
                 (!(obj instanceof Integer) && !(obj instanceof Byte) &&
                         !(obj instanceof Short) && !(obj instanceof Long) &&
                         !(obj instanceof  Float) && !(obj instanceof Double) &&
@@ -116,8 +118,9 @@ public class OperationObject {
         }
     }
 
+    //给对象内指定的属性赋值
     public static void setValue(Object object,Object indexOrKey, Object value){
-        if(object instanceof Collection){
+        if(object instanceof Collection){                                     //判断是否是Collection对象
             Object[] objArr = ((Collection)object).toArray();
             for(int i = 0;i<objArr.length; i++){
                 if(i == Integer.parseInt(indexOrKey.toString())){
@@ -126,9 +129,9 @@ public class OperationObject {
             }
             ((Collection)object).clear();
             CollectionUtils.addAll(((Collection)object),objArr);
-        } else if(object instanceof Map){
+        } else if(object instanceof Map){                                   //判断是否是Map对象
             if(((Map)object).containsKey(indexOrKey)) ((Map)object).put(indexOrKey,value);
-        } else if(object !=null && object.getClass().isArray()){
+        } else if(object !=null && object.getClass().isArray()){             //判断是否是数组
             if((object instanceof int[])){
                 ((int[]) object)[Integer.parseInt(indexOrKey.toString())] = Integer.parseInt(value.toString());
             }else if((object instanceof byte[])){
@@ -148,7 +151,7 @@ public class OperationObject {
             }else if((object instanceof String[])){
                 ((String[]) object)[Integer.parseInt(indexOrKey.toString())] = value.toString();
             }
-        }else if(object!=null &&
+        }else if(object!=null &&                                            //判断是否是pojo对象
                 (!(object instanceof Integer) && !(object instanceof Byte) &&
                         !(object instanceof Short) && !(object instanceof Long) &&
                         !(object instanceof  Float) && !(object instanceof Double) &&

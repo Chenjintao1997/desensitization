@@ -19,6 +19,7 @@ import java.util.Map;
 @Aspect
 public class InfoMasksAdvice {
     private static final Logger LOG = Logger.getLogger(InfoMasksAdvice.class);
+    //脱敏信息类型对象缓存
     Map<String,List<InfoOperator>> operatorCache = new HashMap<>();
 
     @Around("execution(public * *(..)) && @annotation(cjt.annotations.InfoMasks)")
@@ -29,6 +30,7 @@ public class InfoMasksAdvice {
             String methodName = signature.getMethod().getName();
             InfoMasks infoMasks = signature.getMethod().getAnnotation(InfoMasks.class);
             List<InfoOperator> operators = new ArrayList<>();
+            //获取脱敏信息类型对象
             if (CollectionUtils.isEmpty(operatorCache.get(methodName))){
                 for (InfoMask infoMask:infoMasks.value()){
                     InfoOperator infoOperator = infoMask.value().newInstance();
@@ -40,6 +42,8 @@ public class InfoMasksAdvice {
             }else operators = operatorCache.get(methodName);
             result = joint.proceed();
             final List<InfoOperator> finalOperators = operators;
+
+            //对result对象内部信息做深度处理
             OperationObject.doOperation(result, new OperationObject.Visitor() {
                 @Override
                 public void visit(Object object, Object indexOrKey, Object value) {
