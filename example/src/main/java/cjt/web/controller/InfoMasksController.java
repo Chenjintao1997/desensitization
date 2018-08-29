@@ -7,9 +7,17 @@ import cjt.beans.IdCardInfoOperator;
 import cjt.beans.PhoneInfoOperator;
 import cjt.beans.RealNameInfoOperator;
 import cjt.web.vo.InfoMaskPojoTest;
+import com.alibaba.fastjson.JSON;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +25,7 @@ import java.util.Map;
 
 @RestController
 public class InfoMasksController {
+
 
     @InfoMasks
     @GetMapping("test/infoMasker")
@@ -94,5 +103,48 @@ public class InfoMasksController {
         map.put("map",map2);
         System.out.println("脱敏前："+map.toString());
         return map;
+    }
+//    @PostMapping("/test/login")
+//    public Object testLogin(HttpServletRequest request, HttpServletResponse response){
+//
+//        System.out.println(jedisConnectionFactory.getHostName());
+//        InfoMaskPojoTest infoMaskPojoTest = new InfoMaskPojoTest();
+//        infoMaskPojoTest.setAge(10);
+//        infoMaskPojoTest.setUserName("zs");
+//        infoMaskPojoTest.setIdCard("789789789");
+//        infoMaskPojoTest.setPhone("15515091290");
+//        infoMaskPojoTest.setIdCard("410521199706047019");
+//        infoMaskPojoTest.setSex("男");
+//        String infoMaskPojoTestJson = JSON.toJSONString(infoMaskPojoTest);
+//        request.getSession().setAttribute("tenantId",infoMaskPojoTestJson);
+//        return request.getSession().getAttribute("tenantId").toString();
+//    }
+//    @PostMapping("/test/login1")
+//    public Object testLogin1(HttpServletRequest request, HttpServletResponse response){
+//
+//        System.out.println(jedisConnectionFactory.getHostName());
+//        request.getSession().setAttribute("tenantId","789789");
+//        return null;
+//    }
+
+
+    @PostMapping("/add/session")
+    public Object addSession(HttpServletRequest request,@RequestParam("tenantId")String tenantId){
+        HttpSession session = request.getSession();
+        session.setAttribute("tenantId",tenantId);
+        return true;
+    }
+
+    @PostMapping("/invalidate/session")
+    public Object invalidateSession(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        session.invalidate();
+        return true;
+    }
+    @PostMapping("/get/session")
+    public Object getSession(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        System.out.println(session.getAttribute("tenantId"));
+        return session.getAttribute("tenantId");
     }
 }

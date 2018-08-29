@@ -1,6 +1,8 @@
 package cjt.web.vo;
 
-public class InfoMaskPojoTest {
+import java.io.Serializable;
+
+public class InfoMaskPojoTest implements Serializable{
     private String userName;
     private String phone;
     private String idCard;

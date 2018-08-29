@@ -1,6 +1,11 @@
 package cjt.core.bo;
 
-public class InfoMaskPojoTest {
+import java.io.Serializable;
+
+public class InfoMaskPojoTest implements Serializable{
+
+    private static final long serialVersionUID = -8366929034564774130L;
+
     private String userName;
     private String phone;
     private String idCard;
